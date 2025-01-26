@@ -15,30 +15,33 @@ const JournalCard: React.FC<JournalCardProps> = ({ journal }) => {
         className="p-4 cursor-pointer flex justify-between items-center"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <h3 className="text-xl text-black font-semibold">{journal.Name}</h3>
+        <h3 className="md:text-xl text-md text-black font-semibold">
+          Rank: {journal.id} {journal.Name}
+        </h3>
+
         {isExpanded ? <ChevronUp /> : <ChevronDown />}
       </div>
 
       {isExpanded && (
-        <div className="p-4 pt-0 border-t border-white">
+        <div className="md:p-4 md:pt-0 p-1 border-t border-white">
           
           <div className="flex items-center space-x-2">
               
               <span></span>
             </div>
           
-          <div className="grid grid-cols-3 text-black mt-2 gap-4">
+          <div className="grid grid-cols-3 text-black md:mt-2 mt-1 md:gap-4 gap-1">
             <div className="flex  items-center space-x-2">
-              <Building className="w-5 h-5 text-blue-600 text-md" />
-              <span>{journal.Publisher}</span>
+              <Building className="w-10 h-12 text-blue-600 md:text-[18px] text-sm" />
+              <span className='md:text-[18px] text-sm'>{journal.Publisher}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Award className="w-5 h-5 text-blue-600 text-md" />
-              <span>Impact Factor: {journal.JIF}</span>
+              <Award className="w-10 h-12 text-blue-600 text-sm" />
+              <span className='md:text-[18px] text-sm'>Impact Factor: {journal.JIF}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-blue-600 text-md" />
-              <span>First Decision: {journal.Decision_Time} days</span>
+              <Clock className="w-10 h-12 text-blue-600 text-sm" />
+              <span className='md:text-[18px] text-sm'>First Decision: {journal.Decision_Time} days</span>
             </div>
           </div>
 

@@ -3,6 +3,7 @@ import { BookTextIcon } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import JournalCard from './components/JournalCard';
 import { Journal, FilterCriteria } from './types';
+import { FadeLoader } from 'react-spinners';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -52,13 +53,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white from-red-900 to-black text-gray-100">
+    <div className="min-h-screen bg-white from-red-900 to-black text-gray-100 overflow-y-hidden">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center justify-center space-x-3">
+          <div className="flex items-center ml-10 justify-center space-x-3">
             <BookTextIcon className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-medium font-mono text-blue-600 tracking-widest">
+            <h1 className="text-3xl font-medium font-mono  text-blue-600 tracking-widest">
               Journal Finder
             </h1>
           </div>
@@ -73,14 +74,14 @@ function App() {
           />
 
           {/* Main Content */}
-          <div className={`flex-1 transition-all ${isSidebarOpen ? 'ml-80' : 'ml-0'}`}>
+          <div className={`flex-1 transition-all ${isSidebarOpen ? 'md:ml-80 mr-0' : 'md:ml-0 mr-4'}`}>
             {/* Abstract Input */}
             <div className="bg-zinc-300 sidebar  rounded-lg p-6 mb-6">
               <label className="block text-lg text-black font-semibold mb-2">
                 Enter Your Abstract:
               </label>
               <textarea
-                className="w-full h-40 px-4 py-2 bg-zinc-300  sidebar  rounded-lg focus:border-white  resize-none text-gray-100"
+                className="w-full h-40 px-0 py-2 bg-zinc-300  sidebar  rounded-lg focus:border-white  resize-none text-black"
                 placeholder="Paste your abstract here..."
                 value={abstract}
                 onChange={(e) => setAbstract(e.target.value)}
@@ -92,8 +93,8 @@ function App() {
               
               {loading ? (
                 <div className="flex justify-center items-center h-20">
-                <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-black border-solid border-transparent"></div>
-              </div>
+                  <FadeLoader color="#2563EB" />
+                </div>
               
             
               ) : (

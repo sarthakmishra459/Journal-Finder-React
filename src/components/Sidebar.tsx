@@ -69,8 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
       {/* Toggle Button */}
       <button
         onClick={onToggle}
-        className={`absolute -top-16 left-60 bg-blue-900 p-2 rounded-full shadow-lg transition-all z-20 ${
-          isOpen ? 'translate-x-0' : 'left-7'
+        className={`absolute md:-top-16 md:left-60 -top-20 -left-3 bg-blue-900 p-2 rounded-full shadow-lg transition-all z-20 ${
+          isOpen ? 'md:translate-x-0 translate-x-64' : 'md:left-7'
         }`}
       >
         {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
