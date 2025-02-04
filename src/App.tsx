@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BookTextIcon } from 'lucide-react';
 import Sidebar from './components/Sidebar';
-import JournalCard from './components/JournalCard';
 import { Journal, FilterCriteria } from './types';
 import { FadeLoader } from 'react-spinners';
+import { ExpandableJournalCards } from './components/PopupCard';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -98,9 +98,9 @@ function App() {
               
             
               ) : (
-                journals.map((journal) => (
-                  <JournalCard key={journal.id} journal={journal} />
-                ))
+                
+                  <ExpandableJournalCards journals={journals} />
+                
               )}
             </div>
           </div>

@@ -4,7 +4,7 @@ import { FilterCriteria, LLMModel } from '../types';
 
 const publishers = [
   "Elsevier",
-  "Springer Nature",
+  "Springer",
   "Wiley",
   "Taylor & Francis",
   "MDPI",
@@ -16,26 +16,10 @@ const publishers = [
 ];
 
 const llmModels: { id: LLMModel; name: string; description: string }[] = [
-  {
-    id: 'faiss',
-    name: 'FAISS',
-    description: 'Facebook AI Similarity Search - Efficient similarity search and clustering'
-  },
-  {
-    id: 'gemini-pro',
-    name: 'Gemini',
-    description: 'Google\'s most capable AI model for text analysis'
-  },
-  {
-    id: 'mixtral',
-    name: 'Mixtral',
-    description: 'Mistral AI\'s powerful mixture-of-experts model'
-  },
-  {
-    id: 'openai',
-    name: 'OpenAI',
-    description: 'Open AI\'s powerful state of the art model'
-  }
+  { id: 'faiss', name: 'FAISS', description: 'Efficient similarity search and clustering' },
+  { id: 'gemini-pro', name: 'Gemini', description: "Google's top AI model for text analysis" },
+  { id: 'mixtral', name: 'Mixtral', description: "Mistral AI's mixture-of-experts model" },
+  { id: 'openai', name: 'OpenAI', description: 'Powerful state-of-the-art model' }
 ];
 
 interface SidebarProps {
@@ -48,25 +32,54 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
   const [impactFactor, setImpactFactor] = useState<number>(0);
   const [firstDecisionTime, setFirstDecisionTime] = useState<number>(30);
   const [publisherSearch, setPublisherSearch] = useState('');
-  const [selectedPublisher, setSelectedPublisher] = useState('');
+  const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
   const [selectedLLM, setSelectedLLM] = useState<LLMModel>('faiss');
 
-  const filteredPublishers = publishers.filter(pub => 
-    pub.toLowerCase().includes(publisherSearch.toLowerCase())
+  const filteredPublishers = publishers.filter(publisher =>
+    publisher.toLowerCase().includes(publisherSearch.toLowerCase())
   );
 
+  const handlePublisherClick = (publisher: string) => {
+    if (!selectedPublishers.includes(publisher)) {
+      setSelectedPublishers([...selectedPublishers, publisher]);
+    }
+    setPublisherSearch('');
+  };
+
   const handleSearch = () => {
+    
+    if(publisherSearch){
+      if (!selectedPublishers.includes(publisherSearch)) {
+        const updatedPublishers = [...selectedPublishers, publisherSearch.toString()];
+        setSelectedPublishers(updatedPublishers);
+        onSearch({
+          impactFactor,
+          firstDecisionTime,
+          publisher: updatedPublishers.join(' '), // Space-separated string
+          llmModel: selectedLLM
+        });
+      } else {
+        onSearch({
+          impactFactor,
+          firstDecisionTime,
+          publisher: selectedPublishers.join(' '), // Space-separated string
+          llmModel: selectedLLM
+        });
+      }
+    }else{
     onSearch({
       impactFactor,
       firstDecisionTime,
-      publisher: selectedPublisher,
+      publisher: selectedPublishers.join(' '), // Space-separated string
       llmModel: selectedLLM
     });
+    
+  }
+  console.log(selectedPublishers.join(' '))
   };
 
   return (
     <div className="relative z-10">
-      {/* Toggle Button */}
       <button
         onClick={onToggle}
         className={`absolute md:-top-16 md:left-60 -top-20 -left-3 bg-blue-900 p-2 rounded-full shadow-lg transition-all z-20 ${
@@ -76,9 +89,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
         {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
       </button>
 
-      {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-screen  bg-zinc-300 backdrop-blur-sm border-r border-zinc-300 transition-all duration-300 sidebar overflow-y-auto ${
+        className={`fixed left-0 top-0 h-screen bg-zinc-300 border-r border-zinc-300 transition-all duration-300 overflow-y-auto ${
           isOpen ? 'w-80' : 'w-0'
         }`}
       >
@@ -88,15 +100,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
 
             {/* LLM Model Selection */}
             <div className="space-y-3">
-              <label className=" text-sm text-black font-medium mb-2 flex items-center gap-2">
-                <Cpu className="w-4 text-black h-4" />
+              <label className="text-sm text-black font-medium flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-black" />
                 Select AI Model
               </label>
               <div className="space-y-2">
-                {llmModels.map((model) => (
+                {llmModels.map(model => (
                   <div
                     key={model.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                    className={`p-3 rounded-lg border cursor-pointer ${
                       selectedLLM === model.id
                         ? 'bg-blue-600 border-2'
                         : 'bg-zinc-400 text-black border-white hover:border-blue-600 border-2'
@@ -109,11 +121,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
                           selectedLLM === model.id ? 'bg-white' : 'bg-blue-900'
                         }`}
                       />
-                      <span className="font-semibold tracking-wider">{model.name}</span>
+                      <span className="font-semibold">{model.name}</span>
                     </div>
-                    <p className={`text-sm ${
-                          selectedLLM === model.id ? 'text-white' : 'text-black'
-                        } font-medium  tracking-wider mt-1 ml-5`}>
+                    <p className={`text-sm ${selectedLLM === model.id ? 'text-white' : 'text-black'}`}>
                       {model.description}
                     </p>
                   </div>
@@ -124,76 +134,66 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
             {/* Impact Factor */}
             <div>
               <label className="block text-sm text-black font-medium mb-2">
-                Minimum Impact Factor: {impactFactor}
+                Minimum Impact Factor:
               </label>
               <input
-                type="range"
+                type="number"
                 min="0"
                 max="50"
                 step="0.1"
                 value={impactFactor}
-                onChange={(e) => setImpactFactor(parseFloat(e.target.value))}
-                className="w-full h-2 bg-blue-700 rounded-lg accent-blue-500 appearance-none cursor-pointer"
+                onChange={e => setImpactFactor(parseFloat(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-black"
+                placeholder="Enter minimum impact factor"
               />
             </div>
 
-            {/* First Decision Time */}
+            {/* Publisher Selection */}
             <div>
-              <label className="block text-black text-sm font-medium mb-2">
-                Maximum First Decision Time (days): {firstDecisionTime}
-              </label>
-              <input
-                type="range"
-                min="1"
-                max="90"
-                value={firstDecisionTime}
-                onChange={(e) => setFirstDecisionTime(parseInt(e.target.value))}
-                className="w-full h-2 bg-blue-700 accent-blue-500 rounded-lg appearance-none cursor-pointer"
-              />
-            </div>
-
-            {/* Publisher Search */}
-            <div>
-              <label className="block text-sm text-black font-medium mb-2">
-                Preferred Publisher
-              </label>
+              <label className="block text-sm text-black font-medium mb-2">Preferred Publishers</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Search publishers..."
                   value={publisherSearch}
-                  onChange={(e) => setPublisherSearch(e.target.value)}
-                  className="w-full px-4 py-2  border-blue-800 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onChange={e => setPublisherSearch(e.target.value)}
+                  className="w-full px-4 py-2 border border-blue-800 rounded-lg text-black focus:ring-2 focus:ring-blue-500"
                 />
                 <div className="absolute right-3 top-2.5 text-black">
                   <Search size={20} />
                 </div>
               </div>
-              {publisherSearch && (
-                <div className="mt-2 max-h-40 overflow-y-auto text-black bg-zinc-400 rounded-lg border border-blue-800">
-                  {filteredPublishers.map((pub) => (
-                    <button
-                      key={pub}
-                      onClick={() => {
-                        setSelectedPublisher(pub);
-                        setPublisherSearch('');
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-blue-900 transition-colors"
-                    >
-                      {pub}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {selectedPublisher && (
-                <div className="mt-2 px-4 py-2 bg-blue-600 rounded-lg flex justify-between items-center">
-                  <span>{selectedPublisher}</span>
-                  <button
-                    onClick={() => setSelectedPublisher('')}
-                    className="text-blue-300 hover:text-blue-100"
+
+              {/* Display selected publishers as tags */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {selectedPublishers.map((publisher, index) => (
+                  <div
+                    key={index}
+                    className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm flex items-center gap-1"
                   >
-                    ×
-                  </button>
+                    {publisher}
+                    <button
+                      onClick={() => setSelectedPublishers(selectedPublishers.filter(p => p !== publisher))}
+                      className="text-white hover:text-red-500"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Display filtered publishers as dropdown */}
+              {publisherSearch && (
+                <div className="mt-2 bg-white border text-black border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+                  {filteredPublishers.map((publisher, index) => (
+                    <div
+                      key={index}
+                      className="p-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={() => handlePublisherClick(publisher)}
+                    >
+                      {publisher}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -201,7 +201,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-600 rounded-lg font-medium transition-colors"
+              className="w-full py-2 bg-blue-700 hover:bg-blue-600 rounded-lg font-medium"
             >
               Find Journals
             </button>
