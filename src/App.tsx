@@ -53,13 +53,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white from-red-900 to-black text-gray-100 overflow-y-hidden">
+    <div className="min-h-screen bg-white from-red-900  to-black text-gray-100 overflow-y-hidden">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center ml-10 justify-center space-x-3">
+          <div className="flex items-center md:ml-10 justify-center md:space-x-3 space-x-1">
             <BookTextIcon className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-medium font-mono  text-blue-600 tracking-widest">
+            <h1 className="md:text-3xl text-xl font-medium font-mono   text-blue-600 md:tracking-widest tracking-tighter">
               Journal Finder
             </h1>
           </div>

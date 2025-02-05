@@ -47,51 +47,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
   };
 
   const handleSearch = () => {
-    
-    if(publisherSearch){
-      if (!selectedPublishers.includes(publisherSearch)) {
-        const updatedPublishers = [...selectedPublishers, publisherSearch.toString()];
-        setSelectedPublishers(updatedPublishers);
-        onSearch({
-          impactFactor,
-          firstDecisionTime,
-          publisher: updatedPublishers.join(' '), // Space-separated string
-          llmModel: selectedLLM
-        });
-      } else {
-        onSearch({
-          impactFactor,
-          firstDecisionTime,
-          publisher: selectedPublishers.join(' '), // Space-separated string
-          llmModel: selectedLLM
-        });
-      }
-    }else{
+    if(publisherSearch !== ''){
+      setSelectedPublishers([...selectedPublishers, publisherSearch]);
+    }
+    selectedPublishers.push(publisherSearch);
     onSearch({
       impactFactor,
       firstDecisionTime,
-      publisher: selectedPublishers.join(' '), // Space-separated string
+      publisher: selectedPublishers.join(' ') || publisherSearch, // Space-separated string
       llmModel: selectedLLM
     });
     
-  }
-  console.log(selectedPublishers.join(' '))
+  
+  console.log(selectedPublishers.join(' ') || publisherSearch)
   };
+  
 
   return (
     <div className="relative z-10">
-      <button
-        onClick={onToggle}
-        className={`absolute md:-top-16 md:left-60 -top-20 -left-3 bg-blue-900 p-2 rounded-full shadow-lg transition-all z-20 ${
-          isOpen ? 'md:translate-x-0 translate-x-64' : 'md:left-7'
-        }`}
-      >
-        {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-      </button>
+          <button
+      onClick={onToggle}
+      className={`fixed md:top-6  -left-20 bg-blue-900 p-2 rounded-full shadow-lg transition-all z-20
+        ${isOpen ? 'md:translate-x-0 translate-x-64 md:left-64 top-8' : 'md:left-9 left-2 top-8'}`}
+        >
+      {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+    </button>
+
 
       <div
-        className={`fixed left-0 top-0 h-screen bg-zinc-300 border-r border-zinc-300 transition-all duration-300 overflow-y-auto ${
-          isOpen ? 'w-80' : 'w-0'
+        className={`fixed left-0 top-0 h-screen sidebar bg-zinc-300 border-r border-zinc-300 transition-all duration-300 overflow-y-auto ${
+          isOpen ? 'md:w-80 w-56' : 'w-0'
         }`}
       >
         {isOpen && (

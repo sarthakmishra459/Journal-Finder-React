@@ -40,7 +40,7 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 h-full w-full z-10"
+            className="fixed inset-0 backdrop-blur-sm h-full w-full z-10"
           />
         )}
       </AnimatePresence>
@@ -54,7 +54,7 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="absolute top-2 right-2 bg-white rounded-full h-6 w-6"
+              className="absolute top-2 right-2 bg-blue-600 text-white rounded-full h-6 w-6"
               onClick={() => setActive(null)}
             >
               X
@@ -63,7 +63,8 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
             <motion.div
               layoutId={`card-${active.Name}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px] text-black bg-white rounded-3xl overflow-hidden p-4 shadow-lg"
+              className="w-full max-w-[500px] text-black bg-zinc-700 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100
+ rounded-3xl overflow-hidden p-4 shadow-lg"
             >
               <h3 className="font-bold text-xl text-center mb-2">{active.Name}</h3>
               <div className="flex items-center justify-between p-2">
