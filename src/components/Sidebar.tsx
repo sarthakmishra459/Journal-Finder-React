@@ -30,6 +30,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
   const [impactFactor, setImpactFactor] = useState<number>(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [firstDecisionTime, setFirstDecisionTime] = useState<number>(30);
   const [publisherSearch, setPublisherSearch] = useState('');
   const [selectedPublishers, setSelectedPublishers] = useState<string[]>([]);
@@ -152,7 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
               {/* Display selected publishers as tags */}
               <div className="flex flex-wrap gap-2 mt-2">
                 {selectedPublishers.map((publisher, index) => (
-                  <div
+                  publisher !=='' && (<div
                     key={index}
                     className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm flex items-center gap-1"
                   >
@@ -163,24 +164,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onSearch }) => {
                     >
                       ×
                     </button>
-                  </div>
+                  </div>)
                 ))}
               </div>
 
               {/* Display filtered publishers as dropdown */}
               {publisherSearch && (
-                <div className="mt-2 bg-white border text-black border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto">
-                  {filteredPublishers.map((publisher, index) => (
-                    <div
-                      key={index}
-                      className="p-2 hover:bg-blue-100 cursor-pointer"
-                      onClick={() => handlePublisherClick(publisher)}
-                    >
-                      {publisher}
-                    </div>
-                  ))}
-                </div>
-              )}
+  <div className="mt-2 bg-white border text-black border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+    {filteredPublishers.map((publisher, index) => (
+      publisher !== '' && ( // Check if publisher is not an empty string
+        <div
+          key={index}
+          className="p-2 hover:bg-blue-100 cursor-pointer"
+          onClick={() => handlePublisherClick(publisher)}
+        >
+          {publisher}
+        </div>
+      )
+    ))}
+  </div>
+)}
             </div>
 
             {/* Search Button */}

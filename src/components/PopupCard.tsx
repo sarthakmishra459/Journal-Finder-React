@@ -54,7 +54,7 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="absolute top-2 right-2 bg-blue-600 text-white rounded-full h-6 w-6"
+              className="absolute  top-2 right-2 bg-blue-600 text-white rounded-full h-6 w-6"
               onClick={() => setActive(null)}
             >
               X
@@ -63,7 +63,7 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
             <motion.div
               layoutId={`card-${active.Name}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px] text-black bg-zinc-700 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100
+              className="w-full max-w-[500px] text-black bg-blue-600 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100
  rounded-3xl overflow-hidden p-4 shadow-lg"
             >
               <h3 className="font-bold text-xl text-center mb-2">{active.Name}</h3>
@@ -94,7 +94,7 @@ export function ExpandableJournalCards({ journals }: ExpandableJournalCardsProps
             key={journal.id}
             layoutId={`card-${journal.Name}-${id}`}
             onClick={() => setActive(journal)}
-            className="p-4 border rounded-lg shadow-sm cursor-pointer text-black hover:bg-gray-50"
+            className="p-4 flex flex-col justify-around h-full w-full bg-gray-400  bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100  rounded-lg shadow-sm cursor-pointer text-black hover:bg-gray-50"
           >
             <h3 className="font-semibold text-lg">{journal.Name}</h3>
             <p className="text-sm font-semibold text-blue-700">Publisher: {journal.Publisher}</p>

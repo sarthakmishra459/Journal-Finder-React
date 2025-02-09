@@ -85,6 +85,10 @@ function App() {
                 placeholder="Paste your abstract here..."
                 value={abstract}
                 onChange={(e) => setAbstract(e.target.value)}
+                spellCheck= "false"
+                data-gramm_editor="false"
+                data-gramm="false"
+                data-enable-grammarly="false"
               />
             </div>
 
